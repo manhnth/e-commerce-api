@@ -16,7 +16,7 @@ router
   .get(authorizeUser, authorizePermissions('admin'), getAllUsers);
 router
   .route('/showCurrentUser')
-  .get(authorizedUser, showCurrentUser);
+  .get(authorizeUser, showCurrentUser);
 router
   .route('/updateUser')
   .patch(authorizeUser, updateUser);
