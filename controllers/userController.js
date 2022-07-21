@@ -28,8 +28,7 @@ const updateUser = async (req, res) => {
   if (!name || !email) {
     throw new CustomError.BadRequestError('Please provide all values');
   }
-  const user = await User.findOne({ _id: req.user.userId }, { name: 1, email: 1, _id: 0 });
-
+  const user = await User.findOne({ _id: req.user.userId }, { name: 1, email: 1 });
   user.name = name;
   user.email = email;
   await user.save();
