@@ -35,9 +35,6 @@ const getAllProducts = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   const { productID } = req.params;
   const product = await Product.findOne({ _id: productID });
-  if (!product) {
-    throw new CustomError.NotFoundError('not found');
-  }
 
   res.status(StatusCodes.OK).json({ product })
 };
@@ -70,4 +67,4 @@ module.exports = {
   getSingleProduct,
   updateProduct,
   deleteProduct
-}
+};
