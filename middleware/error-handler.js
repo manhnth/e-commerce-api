@@ -3,10 +3,16 @@ const { StatusCodes } = require('http-status-codes');
 const errorHandlerMiddleware = (err, req, res, next) => {
   let customError = {
     statusCode: err.statusCode || 500,
-    msg: err.message || 'some thing went wrong'
+    msg: err.message || 'some thing went wrong try again later'
   };
 
-  // handler error from mongoose method
+  if (err.name === 'ValidationError') {
+    customError.msg = Object.values(err.errors)
+      .map((item) => item.message)
+      .join(',');
+    customError.statusCode = 400;
+  }
+
   if (err.name === 'CastError') {
     customError.statusCode = StatusCodes.NOT_FOUND;
     customError.msg = `No item found with id: ${err.value}`;

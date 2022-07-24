@@ -17,6 +17,7 @@ cloudinary.config({
 })
 
 // MIDDLEWARE
+const notFoundErrorHandler = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler');
 
 // DATABASE
@@ -41,9 +42,10 @@ app.use(fileUpload({ useTempFiles: true }));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
-// app.use('/api/v1/orders', orderRouter);
+app.use('/api/v1/orders', orderRouter);
 // app.use('api/v1/reviews', reviewRouter);
 
+app.use(notFoundErrorHandler);
 app.use(errorHandlerMiddleware);
 
 

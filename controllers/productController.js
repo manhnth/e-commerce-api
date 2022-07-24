@@ -35,6 +35,9 @@ const getAllProducts = async (req, res) => {
 const getSingleProduct = async (req, res) => {
   const { productID } = req.params;
   const product = await Product.findOne({ _id: productID });
+  if (!product) {
+    throw new CustomError.NotFoundError(`No product found with id: ${productID}`)
+  }
 
   res.status(StatusCodes.OK).json({ product })
 };
@@ -45,16 +48,19 @@ const updateProduct = async (req, res) => {
     new: true,
     runValidators: true
   });
+  if (!product) {
+    throw new CustomError.NotFoundError(`No product found with id: ${productID}`)
+  }
 
   res.status(StatusCodes.OK).json({ product });
 };
 
 const deleteProduct = async (req, res) => {
   const { productID } = req.params;
-  const product = await Product.findByIdAndUpdate({ _id: productID }, req.body, {
-    new: true,
-    runValidators: true
-  });
+  const product = await Product.findOne({ _id: productID });
+  if (!product) {
+    throw new CustomError.NotFoundError(`No product found with id: ${productID}`)
+  }
 
   await product.remove();
   res.status(StatusCodes.OK).json({ msg: 'Success! product removed!' });

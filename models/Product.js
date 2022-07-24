@@ -20,17 +20,17 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     default: 'example.jpg'
   },
-  category: {
+  brand: {
     type: String,
     enum: {
-      values: ['office', 'living', 'bedroom', 'dinning'],
+      values: ['whisky', 'vodka', 'gin'],
       message: '{Value} is not supported'
     }
   },
-  company: {
+  country: {
     type: String,
     enum: {
-      values: ['sophie', 'bolia', 'elite'],
+      values: ['russia', 'france', 'italia'],
       message: '{Value} is not supported'
     }
   },
