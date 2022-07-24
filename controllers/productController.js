@@ -12,14 +12,12 @@ const createProduct = async (req, res) => {
 };
 
 const uploadProductImg = async (req, res) => {
-  console.log(req.files);
   const result = await cloudinary.v2.uploader.upload(
     req.files.image.tempFilePath,
     {
       use_filename: true,
       folder: 'e-commerce-products'
-    },
-    function (error, result) { console.log(result, error) }
+    }
   );
 
   fs.unlinkSync(req.files.image.tempFilePath);
@@ -34,7 +32,7 @@ const getAllProducts = async (req, res) => {
 
 const getSingleProduct = async (req, res) => {
   const { productID } = req.params;
-  const product = await Product.findOne({ _id: productID });
+  const product = await Product.findOne({ _id: productID }).populate('reviews');
   if (!product) {
     throw new CustomError.NotFoundError(`No product found with id: ${productID}`)
   }

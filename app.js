@@ -7,6 +7,11 @@ const app = express();
 // REST OF THE PACKAGES
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+const rateLimiter = require('express-rate-limit');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const cors = require('cors');
+const mongoSanitize = require('express-mongo-sanitize');
 
 // USE CLOUDINARY V2
 const cloudinary = require('cloudinary').v2;
@@ -30,9 +35,17 @@ const productRouter = require('./routes/productRoutes');
 const orderRouter = require('./routes/orderRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 
-app.get('/', (req, res) => {
-  res.send('server')
-})
+app.set('trust proxy', 1);
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 60,
+  })
+);
+app.use(helmet());
+app.use(cors());
+app.use(xss());
+app.use(mongoSanitize());
 
 
 app.use(express.json());
@@ -43,7 +56,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/products', productRouter);
 app.use('/api/v1/orders', orderRouter);
-// app.use('api/v1/reviews', reviewRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 app.use(notFoundErrorHandler);
 app.use(errorHandlerMiddleware);

@@ -16,7 +16,7 @@ const showCurrentUser = async (req, res) => {
 const getSingleUser = async (req, res) => {
   const user = await User.findOne({ _id: req.params.userId }).select('-password');
   if (!user) {
-    throw new CustomError.NotFoundError(`No user found with id: ${req.params.userId}`);
+    throw new CustomError.NotFoundError(`No user with id: ${req.params.userId}`);
   }
   checkPermissions(req.user, user._id);
 
